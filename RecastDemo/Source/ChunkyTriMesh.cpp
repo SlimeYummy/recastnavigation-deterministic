@@ -16,10 +16,10 @@
 // 3. This notice may not be removed or altered from any source distribution.
 //
 
+#include "Deterministic.h"
 #include "ChunkyTriMesh.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 
 struct BoundsItem
 {
@@ -259,7 +259,7 @@ static bool checkOverlapSegment(const float p[2], const float q[2],
 	
 	for (int i = 0; i < 2; i++)
 	{
-		if (fabsf(d[i]) < EPSILON)
+		if (dmAbs(d[i]) < EPSILON)
 		{
 			// Ray is parallel to slab. No hit if origin not within slab
 			if (p[i] < bmin[i] || p[i] > bmax[i])

@@ -19,7 +19,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
-#include <math.h>
+#include "Deterministic.h"
 #include "TestCase.h"
 #include "DetourNavMesh.h"
 #include "DetourNavMeshQuery.h"

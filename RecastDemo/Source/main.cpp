@@ -33,6 +33,7 @@
 #include "imgui.h"
 #include "imguiRenderGL.h"
 
+#include "Deterministic.h"
 #include "Recast.h"
 #include "RecastDebugDraw.h"
 #include "InputGeom.h"
@@ -899,8 +900,9 @@ int main(int /*argc*/, char** /*argv*/)
 			for (int i = 0; i < 20; ++i)
 			{
 				const float a = (float)i / 20.0f * RC_PI*2;
-				const float fx = (float)x + cosf(a)*r;
-				const float fy = (float)y + sinf(a)*r;
+				DmSinCos sc = dmSinCos(a);
+				const float fx = (float)x + sc.cos*r;
+				const float fy = (float)y + sc.sin*r;
 				glVertex2f(fx,fy);
 			}
 			glEnd();

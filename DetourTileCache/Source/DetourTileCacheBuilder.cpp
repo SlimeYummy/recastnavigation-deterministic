@@ -16,8 +16,8 @@
 // 3. This notice may not be removed or altered from any source distribution.
 //
 
+#include "Deterministic.h"
 #include "DetourCommon.h"
-#include "DetourMath.h"
 #include "DetourStatus.h"
 #include "DetourAssert.h"
 #include "DetourTileCacheBuilder.h"
@@ -1974,12 +1974,12 @@ dtStatus dtMarkCylinderArea(dtTileCacheLayer& layer, const float* orig, const fl
 	const float px = (pos[0]-orig[0])*ics;
 	const float pz = (pos[2]-orig[2])*ics;
 	
-	int minx = (int)dtMathFloorf((bmin[0]-orig[0])*ics);
-	int miny = (int)dtMathFloorf((bmin[1]-orig[1])*ich);
-	int minz = (int)dtMathFloorf((bmin[2]-orig[2])*ics);
-	int maxx = (int)dtMathFloorf((bmax[0]-orig[0])*ics);
-	int maxy = (int)dtMathFloorf((bmax[1]-orig[1])*ich);
-	int maxz = (int)dtMathFloorf((bmax[2]-orig[2])*ics);
+	int minx = (int)dmFloor((bmin[0]-orig[0])*ics);
+	int miny = (int)dmFloor((bmin[1]-orig[1])*ich);
+	int minz = (int)dmFloor((bmin[2]-orig[2])*ics);
+	int maxx = (int)dmFloor((bmax[0]-orig[0])*ics);
+	int maxy = (int)dmFloor((bmax[1]-orig[1])*ich);
+	int maxz = (int)dmFloor((bmax[2]-orig[2])*ics);
 
 	if (maxx < 0) return DT_SUCCESS;
 	if (minx >= w) return DT_SUCCESS;
@@ -2017,12 +2017,12 @@ dtStatus dtMarkBoxArea(dtTileCacheLayer& layer, const float* orig, const float c
 	const float ics = 1.0f/cs;
 	const float ich = 1.0f/ch;
 
-	int minx = (int)floorf((bmin[0]-orig[0])*ics);
-	int miny = (int)floorf((bmin[1]-orig[1])*ich);
-	int minz = (int)floorf((bmin[2]-orig[2])*ics);
-	int maxx = (int)floorf((bmax[0]-orig[0])*ics);
-	int maxy = (int)floorf((bmax[1]-orig[1])*ich);
-	int maxz = (int)floorf((bmax[2]-orig[2])*ics);
+	int minx = (int)dmFloor((bmin[0]-orig[0])*ics);
+	int miny = (int)dmFloor((bmin[1]-orig[1])*ich);
+	int minz = (int)dmFloor((bmin[2]-orig[2])*ics);
+	int maxx = (int)dmFloor((bmax[0]-orig[0])*ics);
+	int maxy = (int)dmFloor((bmax[1]-orig[1])*ich);
+	int maxz = (int)dmFloor((bmax[2]-orig[2])*ics);
 	
 	if (maxx < 0) return DT_SUCCESS;
 	if (minx >= w) return DT_SUCCESS;
@@ -2060,12 +2060,12 @@ dtStatus dtMarkBoxArea(dtTileCacheLayer& layer, const float* orig, const float c
 	float cz = (center[2] - orig[2])*ics;
 	
 	float maxr = 1.41f*dtMax(halfExtents[0], halfExtents[2]);
-	int minx = (int)floorf(cx - maxr*ics);
-	int maxx = (int)floorf(cx + maxr*ics);
-	int minz = (int)floorf(cz - maxr*ics);
-	int maxz = (int)floorf(cz + maxr*ics);
-	int miny = (int)floorf((center[1]-halfExtents[1]-orig[1])*ich);
-	int maxy = (int)floorf((center[1]+halfExtents[1]-orig[1])*ich);
+	int minx = (int)dmFloor(cx - maxr*ics);
+	int maxx = (int)dmFloor(cx + maxr*ics);
+	int minz = (int)dmFloor(cz - maxr*ics);
+	int maxz = (int)dmFloor(cz + maxr*ics);
+	int miny = (int)dmFloor((center[1]-halfExtents[1]-orig[1])*ich);
+	int maxy = (int)dmFloor((center[1]+halfExtents[1]-orig[1])*ich);
 
 	if (maxx < 0) return DT_SUCCESS;
 	if (minx >= w) return DT_SUCCESS;

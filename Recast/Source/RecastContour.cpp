@@ -16,10 +16,10 @@
 // 3. This notice may not be removed or altered from any source distribution.
 //
 
-#include <math.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "Deterministic.h"
 #include "Recast.h"
 #include "RecastAlloc.h"
 #include "RecastAssert.h"

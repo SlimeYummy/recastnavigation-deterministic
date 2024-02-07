@@ -20,9 +20,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <float.h>
+#include "Deterministic.h"
 #include "DetourNavMesh.h"
 #include "DetourCommon.h"
-#include "DetourMath.h"
 #include "DetourNavMeshBuilder.h"
 #include "DetourAlloc.h"
 #include "DetourAssert.h"
@@ -227,8 +227,8 @@ static int createBVTree(dtNavMeshCreateParams* params, dtBVNode* nodes, int /*nn
 				if (z > it.bmax[2]) it.bmax[2] = z;
 			}
 			// Remap y
-			it.bmin[1] = (unsigned short)dtMathFloorf((float)it.bmin[1] * params->ch / params->cs);
-			it.bmax[1] = (unsigned short)dtMathCeilf((float)it.bmax[1] * params->ch / params->cs);
+			it.bmin[1] = (unsigned short)dmFloor((float)it.bmin[1] * params->ch / params->cs);
+			it.bmax[1] = (unsigned short)dmCeil((float)it.bmax[1] * params->ch / params->cs);
 		}
 	}
 	
@@ -584,10 +584,11 @@ bool dtCreateNavMeshData(dtNavMeshCreateParams* params, unsigned char** outData,
 			dtl.triBase = (unsigned int)params->detailMeshes[i*4+2];
 			dtl.triCount = (unsigned char)params->detailMeshes[i*4+3];
 			// Copy vertices except the first 'nv' verts which are equal to nav poly verts.
-			if (ndv-nv)
+			auto offset = (unsigned short)(ndv - nv);
+			if (offset && (vbase + offset < params->detailVertsCount))
 			{
-				memcpy(&navDVerts[vbase*3], &params->detailVerts[(vb+nv)*3], sizeof(float)*3*(ndv-nv));
-				vbase += (unsigned short)(ndv-nv);
+				memcpy(&navDVerts[vbase*3], &params->detailVerts[(vb+nv)*3], sizeof(float)*3* offset);
+				vbase += offset;
 			}
 		}
 		// Store triangles.

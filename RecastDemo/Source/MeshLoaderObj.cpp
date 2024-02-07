@@ -16,11 +16,11 @@
 // 3. This notice may not be removed or altered from any source distribution.
 //
 
+#include "Deterministic.h"
 #include "MeshLoaderObj.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <cstring>
-#include <math.h>
 
 rcMeshLoaderObj::rcMeshLoaderObj() :
 	m_scale(1.0f),

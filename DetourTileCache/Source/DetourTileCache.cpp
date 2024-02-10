@@ -1,9 +1,9 @@
+#include "Deterministic.h"
 #include "DetourTileCache.h"
 #include "DetourTileCacheBuilder.h"
 #include "DetourNavMeshBuilder.h"
 #include "DetourNavMesh.h"
 #include "DetourCommon.h"
-#include "DetourMath.h"
 #include "DetourAlloc.h"
 #include "DetourAssert.h"
 #include <string.h>
@@ -448,8 +448,9 @@ dtStatus dtTileCache::addBoxObstacle(const float* center, const float* halfExten
 	dtVcopy(ob->orientedBox.center, center);
 	dtVcopy(ob->orientedBox.halfExtents, halfExtents);
 
-	float coshalf= cosf(0.5f*yRadians);
-	float sinhalf = sinf(-0.5f*yRadians);
+	DmSinCos sc = dmSinCos(-0.5f*yRadians);
+	float coshalf= sc.cos;
+	float sinhalf = sc.sin;
 	ob->orientedBox.rotAux[0] = coshalf*sinhalf;
 	ob->orientedBox.rotAux[1] = coshalf*coshalf - 0.5f;
 
@@ -489,10 +490,10 @@ dtStatus dtTileCache::queryTiles(const float* bmin, const float* bmax,
 	
 	const float tw = m_params.width * m_params.cs;
 	const float th = m_params.height * m_params.cs;
-	const int tx0 = (int)dtMathFloorf((bmin[0]-m_params.orig[0]) / tw);
-	const int tx1 = (int)dtMathFloorf((bmax[0]-m_params.orig[0]) / tw);
-	const int ty0 = (int)dtMathFloorf((bmin[2]-m_params.orig[2]) / th);
-	const int ty1 = (int)dtMathFloorf((bmax[2]-m_params.orig[2]) / th);
+	const int tx0 = (int)dmFloor((bmin[0]-m_params.orig[0]) / tw);
+	const int tx1 = (int)dmFloor((bmax[0]-m_params.orig[0]) / tw);
+	const int ty0 = (int)dmFloor((bmin[2]-m_params.orig[2]) / th);
+	const int ty1 = (int)dmFloor((bmax[2]-m_params.orig[2]) / th);
 	
 	for (int ty = ty0; ty <= ty1; ++ty)
 	{

@@ -16,10 +16,10 @@
 // 3. This notice may not be removed or altered from any source distribution.
 //
 
-#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "Deterministic.h"
 #include "SDL.h"
 #include "SDL_opengl.h"
 #ifdef __APPLE__
@@ -57,7 +57,7 @@ inline bool inRange(const float* v1, const float* v2, const float r, const float
 	const float dx = v2[0] - v1[0];
 	const float dy = v2[1] - v1[1];
 	const float dz = v2[2] - v1[2];
-	return (dx*dx + dz*dz) < r*r && fabsf(dy) < h;
+	return (dx*dx + dz*dz) < r*r && dmAbs(dy) < h;
 }
 
 // This function checks if the path has a small U-turn, that is,
@@ -702,7 +702,7 @@ void NavMeshTesterTool::recalc()
 					// Find movement delta.
 					float delta[3], len;
 					dtVsub(delta, steerPos, iterPos);
-					len = dtMathSqrtf(dtVdot(delta, delta));
+					len = dmSqrt(dtVdot(delta, delta));
 					// If the steer target is end of path or off-mesh link, do not move past the location.
 					if ((endOfPath || offMeshConnection) && len < STEP_SIZE)
 						len = 1;

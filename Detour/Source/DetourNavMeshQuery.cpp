@@ -223,7 +223,7 @@ dtStatus dtNavMeshQuery::init(const dtNavMesh* nav, const int maxNodes)
 	return DT_SUCCESS;
 }
 
-dtStatus dtNavMeshQuery::findRandomPoint(const dtQueryFilter* filter, float (*frand)(),
+dtStatus dtNavMeshQuery::findRandomPoint(const dtQueryFilter* filter, std::function<float()> frand,
 										 dtPolyRef* randomRef, float* randomPt) const
 {
 	dtAssert(m_nav);
@@ -315,7 +315,7 @@ dtStatus dtNavMeshQuery::findRandomPoint(const dtQueryFilter* filter, float (*fr
 }
 
 dtStatus dtNavMeshQuery::findRandomPointAroundCircle(dtPolyRef startRef, const float* centerPos, const float maxRadius,
-													 const dtQueryFilter* filter, float (*frand)(),
+													 const dtQueryFilter* filter, std::function<float()> frand,
 													 dtPolyRef* randomRef, float* randomPt) const
 {
 	dtAssert(m_nav);

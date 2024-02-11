@@ -21,6 +21,7 @@
 
 #include "DetourNavMesh.h"
 #include "DetourStatus.h"
+#include <functional>
 
 
 // Define DT_VIRTUAL_QUERYFILTER if you wish to derive a custom filter from dtQueryFilter.
@@ -457,7 +458,7 @@ public:
 	///  @param[out]	randomRef		The reference id of the random location.
 	///  @param[out]	randomPt		The random location. 
 	/// @returns The status flags for the query.
-	dtStatus findRandomPoint(const dtQueryFilter* filter, float (*frand)(),
+	dtStatus findRandomPoint(const dtQueryFilter* filter, std::function<float()> frand,
 							 dtPolyRef* randomRef, float* randomPt) const;
 
 	/// Returns random location on navmesh within the reach of specified location.
@@ -472,7 +473,7 @@ public:
 	///  @param[out]	randomPt		The random location. [(x, y, z)]
 	/// @returns The status flags for the query.
 	dtStatus findRandomPointAroundCircle(dtPolyRef startRef, const float* centerPos, const float maxRadius,
-										 const dtQueryFilter* filter, float (*frand)(),
+										 const dtQueryFilter* filter, std::function<float()> frand,
 										 dtPolyRef* randomRef, float* randomPt) const;
 	
 	/// Finds the closest point on the specified polygon.

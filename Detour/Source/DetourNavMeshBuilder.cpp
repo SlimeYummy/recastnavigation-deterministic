@@ -142,17 +142,17 @@ static void subdivide(BVItem* items, int nitems, int imin, int imax, int& curNod
 		if (axis == 0)
 		{
 			// Sort along x-axis
-			qsort(items+imin, inum, sizeof(BVItem), compareItemX);
+			dmQsort(items+imin, inum, sizeof(BVItem), compareItemX);
 		}
 		else if (axis == 1)
 		{
 			// Sort along y-axis
-			qsort(items+imin, inum, sizeof(BVItem), compareItemY);
+			dmQsort(items+imin, inum, sizeof(BVItem), compareItemY);
 		}
 		else
 		{
 			// Sort along z-axis
-			qsort(items+imin, inum, sizeof(BVItem), compareItemZ);
+			dmQsort(items+imin, inum, sizeof(BVItem), compareItemZ);
 		}
 		
 		int isplit = imin+inum/2;

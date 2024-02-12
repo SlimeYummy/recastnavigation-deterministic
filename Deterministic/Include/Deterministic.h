@@ -2,6 +2,10 @@
 
 #include "math.h"
 
+//
+// math functions
+//
+
 inline bool dmIsFinite(float n) {
 	return isfinite(n);
 }
@@ -52,3 +56,11 @@ float dmASin(float n);
 inline float dmACos(float n) {
 	return FRAC_PI_2 - dmASin(n);
 }
+
+//
+// sqort
+//
+
+typedef int (*DmCmp)(const void*, const void*);
+
+void dmQsort(void* base, size_t nel, size_t width, DmCmp cmp);

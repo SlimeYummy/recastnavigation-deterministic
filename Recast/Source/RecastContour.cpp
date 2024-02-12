@@ -724,7 +724,7 @@ static void mergeRegionHoles(rcContext* ctx, rcContourRegion& region)
 	for (int i = 0; i < region.nholes; i++)
 		findLeftMostVertex(region.holes[i].contour, &region.holes[i].minx, &region.holes[i].minz, &region.holes[i].leftmost);
 	
-	qsort(region.holes, region.nholes, sizeof(rcContourHole), compareHoles);
+	dmQsort(region.holes, region.nholes, sizeof(rcContourHole), compareHoles);
 	
 	int maxVerts = region.outline->nverts;
 	for (int i = 0; i < region.nholes; i++)
@@ -770,7 +770,7 @@ static void mergeRegionHoles(rcContext* ctx, rcContourRegion& region)
 				}
 			}
 			// Sort potential diagonals by distance, we want to make the connection as short as possible.
-			qsort(diags, ndiags, sizeof(rcPotentialDiagonal), compareDiagDist);
+			dmQsort(diags, ndiags, sizeof(rcPotentialDiagonal), compareDiagDist);
 			
 			// Find a diagonal that is not intersecting the outline not the remaining holes.
 			index = -1;

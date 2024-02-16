@@ -11,6 +11,7 @@ target_include_directories(DetourTileCache PUBLIC
 )
 
 target_link_libraries(DetourTileCache
+    Deterministic
     Detour
 )
 

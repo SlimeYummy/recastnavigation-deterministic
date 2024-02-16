@@ -7,4 +7,4 @@ This repo is a fork of the [recastnavigation](https://github.com/recastnavigatio
 
 I plan to regularly merge changes from recastnavigation main branch into this repo.
 
-This repo is also used to compile recastnavigation's Rust wrapper [recastnavigation-rs](https://github.com/SlimeYummy/recastnavigation-deterministic). A little APIs changed to make integration easier. Deterministic tests is alse in Rust repo.
+This repo is also used to compile recastnavigation's Rust wrapper [recastnavigation-rs](https://github.com/SlimeYummy/recastnavigation-rs). A little APIs changed to make integration easier. Deterministic tests is alse in Rust repo.

@@ -2,9 +2,9 @@ name: Build
 
 on:
   push:
-    branches: [ "**" ]
+    branches: ["main", "test"]
   pull_request:
-    branches: [ "**" ]
+    branches: ["main", "test"]
 
 jobs:
   macOS-premake:

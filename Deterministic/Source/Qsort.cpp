@@ -78,7 +78,7 @@ static void cycle(size_t width, unsigned char* ar[], int n)
 /* shl() and shr() need n > 0 */
 static inline void shl(size_t p[2], int n)
 {
-	if (n >= 8 * sizeof(size_t)) {
+	if ((unsigned int)n >= 8 * sizeof(size_t)) {
 		n -= 8 * sizeof(size_t);
 		p[1] = p[0];
 		p[0] = 0;
@@ -90,7 +90,7 @@ static inline void shl(size_t p[2], int n)
 
 static inline void shr(size_t p[2], int n)
 {
-	if (n >= 8 * sizeof(size_t)) {
+	if ((unsigned int)n >= 8 * sizeof(size_t)) {
 		n -= 8 * sizeof(size_t);
 		p[0] = p[1];
 		p[1] = 0;

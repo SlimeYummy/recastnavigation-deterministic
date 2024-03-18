@@ -3,11 +3,13 @@
 const int SIGN = 0x80000000;
 
 int as_int(float f) {
-    return *reinterpret_cast<int*>(&f);
+    int i = *reinterpret_cast<int*>(&f);
+    return i;
 }
 
 float as_float(int i) {
-    return *reinterpret_cast<float*>(&i);
+    int f = *reinterpret_cast<float*>(&i);
+    return f;
 }
 
 DmSinCos dmSinCos(float n) {

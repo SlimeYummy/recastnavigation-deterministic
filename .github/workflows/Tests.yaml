@@ -2,9 +2,9 @@ name: Tests
 
 on:
   push:
-    branches: ["main", "test"]
+    branches: ["master", "test"]
   pull_request:
-    branches: ["main", "test"]
+    branches: ["master", "test"]
 
 jobs:
   macos-tests:

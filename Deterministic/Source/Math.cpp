@@ -2,15 +2,20 @@
 
 const int SIGN = 0x80000000;
 
+#if defined( __GNUC__ )
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wstrict-aliasing"
+#endif
 int as_int(float f) {
-    int i = *reinterpret_cast<int*>(&f);
-    return i;
+    return *reinterpret_cast<int*>(&f);
 }
 
 float as_float(int i) {
-    int f = *reinterpret_cast<float*>(&i);
-    return f;
+    return *reinterpret_cast<float*>(&i);
 }
+#if defined( __GNUC__ )
+#    pragma GCC diagnostic pop
+#endif
 
 DmSinCos dmSinCos(float n) {
     // Implementation based on Vec4.inl from the JoltPhysics

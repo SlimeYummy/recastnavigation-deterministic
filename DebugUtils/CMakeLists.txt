@@ -11,6 +11,7 @@ target_include_directories(DebugUtils PUBLIC
 )
 
 target_link_libraries(DebugUtils
+    Deterministic
     Recast
     Detour
     DetourTileCache

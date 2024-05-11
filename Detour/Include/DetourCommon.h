@@ -19,7 +19,7 @@
 #ifndef DETOURCOMMON_H
 #define DETOURCOMMON_H
 
-#include "DetourMath.h"
+#include "Deterministic.h"
 #include <stddef.h>
 
 /**
@@ -199,7 +199,7 @@ inline void dtVcopy(float* dest, const float* a)
 /// @return The scalar length of the vector.
 inline float dtVlen(const float* v)
 {
-	return dtMathSqrtf(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+	return dmSqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
 }
 
 /// Derives the square of the scalar length of the vector. (len * len)
@@ -219,7 +219,7 @@ inline float dtVdist(const float* v1, const float* v2)
 	const float dx = v2[0] - v1[0];
 	const float dy = v2[1] - v1[1];
 	const float dz = v2[2] - v1[2];
-	return dtMathSqrtf(dx*dx + dy*dy + dz*dz);
+	return dmSqrt(dx*dx + dy*dy + dz*dz);
 }
 
 /// Returns the square of the distance between two points.
@@ -244,7 +244,7 @@ inline float dtVdist2D(const float* v1, const float* v2)
 {
 	const float dx = v2[0] - v1[0];
 	const float dz = v2[2] - v1[2];
-	return dtMathSqrtf(dx*dx + dz*dz);
+	return dmSqrt(dx*dx + dz*dz);
 }
 
 /// Derives the square of the distance between the specified points on the xz-plane.
@@ -262,7 +262,7 @@ inline float dtVdist2DSqr(const float* v1, const float* v2)
 ///  @param[in,out]	v	The vector to normalize. [(x, y, z)]
 inline void dtVnormalize(float* v)
 {
-	float d = 1.0f / dtMathSqrtf(dtSqr(v[0]) + dtSqr(v[1]) + dtSqr(v[2]));
+	float d = 1.0f / dmSqrt(dtSqr(v[0]) + dtSqr(v[1]) + dtSqr(v[2]));
 	v[0] *= d;
 	v[1] *= d;
 	v[2] *= d;
@@ -289,9 +289,9 @@ inline bool dtVequal(const float* p0, const float* p1)
 inline bool dtVisfinite(const float* v)
 {
 	bool result =
-		dtMathIsfinite(v[0]) &&
-		dtMathIsfinite(v[1]) &&
-		dtMathIsfinite(v[2]);
+		dmIsFinite(v[0]) &&
+		dmIsFinite(v[1]) &&
+		dmIsFinite(v[2]);
 
 	return result;
 }
@@ -300,7 +300,7 @@ inline bool dtVisfinite(const float* v)
 ///  @param[in]		v	A point. [(x, y, z)]
 inline bool dtVisfinite2D(const float* v)
 {
-	bool result = dtMathIsfinite(v[0]) && dtMathIsfinite(v[2]);
+	bool result = dmIsFinite(v[0]) && dmIsFinite(v[2]);
 	return result;
 }
 

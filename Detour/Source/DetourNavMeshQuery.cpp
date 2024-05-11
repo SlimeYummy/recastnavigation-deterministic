@@ -18,11 +18,11 @@
 
 #include <float.h>
 #include <string.h>
+#include "Deterministic.h"
 #include "DetourNavMeshQuery.h"
 #include "DetourNavMesh.h"
 #include "DetourNode.h"
 #include "DetourCommon.h"
-#include "DetourMath.h"
 #include "DetourAlloc.h"
 #include "DetourAssert.h"
 #include <new>
@@ -223,7 +223,7 @@ dtStatus dtNavMeshQuery::init(const dtNavMesh* nav, const int maxNodes)
 	return DT_SUCCESS;
 }
 
-dtStatus dtNavMeshQuery::findRandomPoint(const dtQueryFilter* filter, float (*frand)(),
+dtStatus dtNavMeshQuery::findRandomPoint(const dtQueryFilter* filter, std::function<float()> frand,
 										 dtPolyRef* randomRef, float* randomPt) const
 {
 	dtAssert(m_nav);
@@ -315,7 +315,7 @@ dtStatus dtNavMeshQuery::findRandomPoint(const dtQueryFilter* filter, float (*fr
 }
 
 dtStatus dtNavMeshQuery::findRandomPointAroundCircle(dtPolyRef startRef, const float* centerPos, const float maxRadius,
-													 const dtQueryFilter* filter, float (*frand)(),
+													 const dtQueryFilter* filter, std::function<float()> frand,
 													 dtPolyRef* randomRef, float* randomPt) const
 {
 	dtAssert(m_nav);
@@ -325,7 +325,7 @@ dtStatus dtNavMeshQuery::findRandomPointAroundCircle(dtPolyRef startRef, const f
 	// Validate input
 	if (!m_nav->isValidPolyRef(startRef) ||
 		!centerPos || !dtVisfinite(centerPos) ||
-		maxRadius < 0 || !dtMathIsfinite(maxRadius) ||
+		maxRadius < 0 || !dmIsFinite(maxRadius) ||
 		!filter || !frand || !randomRef || !randomPt)
 	{
 		return DT_FAILURE | DT_INVALID_PARAM;
@@ -2733,7 +2733,7 @@ dtStatus dtNavMeshQuery::findPolysAroundCircle(dtPolyRef startRef, const float* 
 
 	if (!m_nav->isValidPolyRef(startRef) ||
 		!centerPos || !dtVisfinite(centerPos) ||
-		radius < 0 || !dtMathIsfinite(radius) ||
+		radius < 0 || !dmIsFinite(radius) ||
 		!filter || maxResult < 0)
 	{
 		return DT_FAILURE | DT_INVALID_PARAM;
@@ -3104,7 +3104,7 @@ dtStatus dtNavMeshQuery::findLocalNeighbourhood(dtPolyRef startRef, const float*
 
 	if (!m_nav->isValidPolyRef(startRef) ||
 		!centerPos || !dtVisfinite(centerPos) ||
-		radius < 0 || !dtMathIsfinite(radius) ||
+		radius < 0 || !dmIsFinite(radius) ||
 		!filter || maxResult < 0)
 	{
 		return DT_FAILURE | DT_INVALID_PARAM;
@@ -3478,7 +3478,7 @@ dtStatus dtNavMeshQuery::findDistanceToWall(dtPolyRef startRef, const float* cen
 	// Validate input
 	if (!m_nav->isValidPolyRef(startRef) ||
 		!centerPos || !dtVisfinite(centerPos) ||
-		maxRadius < 0 || !dtMathIsfinite(maxRadius) ||
+		maxRadius < 0 || !dmIsFinite(maxRadius) ||
 		!filter || !hitDist || !hitPos || !hitNormal)
 	{
 		return DT_FAILURE | DT_INVALID_PARAM;
@@ -3649,7 +3649,7 @@ dtStatus dtNavMeshQuery::findDistanceToWall(dtPolyRef startRef, const float* cen
 	dtVsub(hitNormal, centerPos, hitPos);
 	dtVnormalize(hitNormal);
 	
-	*hitDist = dtMathSqrtf(radiusSqr);
+	*hitDist = dmSqrt(radiusSqr);
 	
 	return status;
 }

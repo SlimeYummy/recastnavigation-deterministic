@@ -10,6 +10,10 @@ target_include_directories(Recast PUBLIC
     "$<BUILD_INTERFACE:${Recast_INCLUDE_DIR}>"
 )
 
+target_link_libraries(Recast
+    Deterministic
+)
+
 set_target_properties(Recast PROPERTIES
         SOVERSION ${SOVERSION}
         VERSION ${LIB_VERSION}

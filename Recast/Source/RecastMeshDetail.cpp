@@ -17,10 +17,10 @@
 //
 
 #include <float.h>
-#include <math.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "Deterministic.h"
 #include "Recast.h"
 #include "RecastAlloc.h"
 #include "RecastAssert.h"
@@ -51,7 +51,7 @@ inline float vdistSq2(const float* p, const float* q)
 
 inline float vdist2(const float* p, const float* q)
 {
-	return sqrtf(vdistSq2(p,q));
+	return dmSqrt(vdistSq2(p,q));
 }
 
 inline float vcross2(const float* p1, const float* p2, const float* p3)
@@ -74,7 +74,7 @@ static bool circumCircle(const float* p1, const float* p2, const float* p3,
 	rcVsub(v3, p3,p1);
 	
 	const float cp = vcross2(v1, v2, v3);
-	if (fabsf(cp) > EPS)
+	if (dmAbs(cp) > EPS)
 	{
 		const float v1Sq = vdot2(v1,v1);
 		const float v2Sq = vdot2(v2,v2);
@@ -115,7 +115,7 @@ static float distPtTri(const float* p, const float* a, const float* b, const flo
 	if (u >= -EPS && v >= -EPS && (u+v) <= 1+EPS)
 	{
 		const float y = a[1] + v0[1]*u + v1[1]*v;
-		return fabsf(y-p[1]);
+		return dmAbs(y-p[1]);
 	}
 	return FLT_MAX;
 }
@@ -203,8 +203,8 @@ static unsigned short getHeight(const float fx, const float fy, const float fz,
 								const float /*cs*/, const float ics, const float ch,
 								const int radius, const rcHeightPatch& hp)
 {
-	int ix = (int)floorf(fx*ics + 0.01f);
-	int iz = (int)floorf(fz*ics + 0.01f);
+	int ix = (int)dmFloor(fx*ics + 0.01f);
+	int iz = (int)dmFloor(fz*ics + 0.01f);
 	ix = rcClamp(ix-hp.xmin, 0, hp.width - 1);
 	iz = rcClamp(iz-hp.ymin, 0, hp.height - 1);
 	unsigned short h = hp.data[ix+iz*hp.width];
@@ -231,7 +231,7 @@ static unsigned short getHeight(const float fx, const float fy, const float fz,
 				const unsigned short nh = hp.data[nx + nz*hp.width];
 				if (nh != RC_UNSET_HEIGHT)
 				{
-					const float d = fabsf(nh*ch - fy);
+					const float d = dmAbs(nh*ch - fy);
 					if (d < dmin)
 					{
 						h = nh;
@@ -707,7 +707,7 @@ static bool buildPolyDetail(rcContext* ctx, const float* in, const int nin,
 			bool swapped = false;
 			// Make sure the segments are always handled in same order
 			// using lexological sort or else there will be seams.
-			if (fabsf(vj[0]-vi[0]) < 1e-6f)
+			if (dmAbs(vj[0]-vi[0]) < 1e-6f)
 			{
 				if (vj[2] > vi[2])
 				{
@@ -727,8 +727,8 @@ static bool buildPolyDetail(rcContext* ctx, const float* in, const int nin,
 			float dx = vi[0] - vj[0];
 			float dy = vi[1] - vj[1];
 			float dz = vi[2] - vj[2];
-			float d = sqrtf(dx*dx + dz*dz);
-			int nn = 1 + (int)floorf(d/sampleDist);
+			float d = dmSqrt(dx*dx + dz*dz);
+			int nn = 1 + (int)dmFloor(d/sampleDist);
 			if (nn >= MAX_VERTS_PER_EDGE) nn = MAX_VERTS_PER_EDGE-1;
 			if (nverts+nn >= MAX_VERTS)
 				nn = MAX_VERTS-1-nverts;
@@ -833,10 +833,10 @@ static bool buildPolyDetail(rcContext* ctx, const float* in, const int nin,
 			rcVmin(bmin, &in[i*3]);
 			rcVmax(bmax, &in[i*3]);
 		}
-		int x0 = (int)floorf(bmin[0]/sampleDist);
-		int x1 = (int)ceilf(bmax[0]/sampleDist);
-		int z0 = (int)floorf(bmin[2]/sampleDist);
-		int z1 = (int)ceilf(bmax[2]/sampleDist);
+		int x0 = (int)dmFloor(bmin[0]/sampleDist);
+		int x1 = (int)dmCeil(bmax[0]/sampleDist);
+		int z0 = (int)dmFloor(bmin[2]/sampleDist);
+		int z1 = (int)dmCeil(bmax[2]/sampleDist);
 		samples.clear();
 		for (int z = z0; z < z1; ++z)
 		{
@@ -1195,7 +1195,7 @@ bool rcBuildPolyMeshDetail(rcContext* ctx, const rcPolyMesh& mesh, const rcCompa
 	const float ch = mesh.ch;
 	const float* orig = mesh.bmin;
 	const int borderSize = mesh.borderSize;
-	const int heightSearchRadius = rcMax(1, (int)ceilf(mesh.maxEdgeError));
+	const int heightSearchRadius = rcMax(1, (int)dmCeil(mesh.maxEdgeError));
 	
 	rcIntArray edges(64);
 	rcIntArray tris(512);
@@ -1398,7 +1398,7 @@ bool rcBuildPolyMeshDetail(rcContext* ctx, const rcPolyMesh& mesh, const rcCompa
 }
 
 /// @see rcAllocPolyMeshDetail, rcPolyMeshDetail
-bool rcMergePolyMeshDetails(rcContext* ctx, rcPolyMeshDetail** meshes, const int nmeshes, rcPolyMeshDetail& mesh)
+bool rcMergePolyMeshDetails(rcContext* ctx, const rcPolyMeshDetail* const* meshes, const int nmeshes, rcPolyMeshDetail& mesh)
 {
 	rcAssert(ctx);
 	
@@ -1443,7 +1443,7 @@ bool rcMergePolyMeshDetails(rcContext* ctx, rcPolyMeshDetail** meshes, const int
 	// Merge datas.
 	for (int i = 0; i < nmeshes; ++i)
 	{
-		rcPolyMeshDetail* dm = meshes[i];
+		const rcPolyMeshDetail* dm = meshes[i];
 		if (!dm) continue;
 		for (int j = 0; j < dm->nmeshes; ++j)
 		{

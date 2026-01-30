@@ -11,6 +11,7 @@ target_include_directories(DetourCrowd PUBLIC
 )
 
 target_link_libraries(DetourCrowd
+    Deterministic
     Detour
 )
 

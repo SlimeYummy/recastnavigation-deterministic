@@ -23,6 +23,7 @@ endif()
 include_directories(SYSTEM ${OPENGL_INCLUDE_DIR})
 include_directories(SYSTEM Contrib/fastlz)
 include_directories(SYSTEM Contrib)
+include_directories(../Deterministic/Include)
 include_directories(../DebugUtils/Include)
 include_directories(../Detour/Include)
 include_directories(../DetourCrowd/Include)
@@ -67,11 +68,11 @@ else()
 endif()
 
 
-add_dependencies(RecastDemo DebugUtils Detour DetourCrowd DetourTileCache Recast)
+add_dependencies(RecastDemo Deterministic DebugUtils Detour DetourCrowd DetourTileCache Recast)
 if(APPLE)
-  target_link_libraries(RecastDemo ${OPENGL_LIBRARIES} ${SDL2_LIBRARY} DebugUtils Detour DetourCrowd DetourTileCache Recast)
+  target_link_libraries(RecastDemo ${OPENGL_LIBRARIES} ${SDL2_LIBRARY} Deterministic DebugUtils Detour DetourCrowd DetourTileCache Recast)
 else()
-  target_link_libraries(RecastDemo ${OPENGL_LIBRARIES} SDL2::SDL2main DebugUtils Detour DetourCrowd DetourTileCache Recast)
+  target_link_libraries(RecastDemo ${OPENGL_LIBRARIES} SDL2::SDL2main Deterministic DebugUtils Detour DetourCrowd DetourTileCache Recast)
 endif()
 
 

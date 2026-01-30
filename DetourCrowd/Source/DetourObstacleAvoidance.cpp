@@ -16,9 +16,9 @@
 // 3. This notice may not be removed or altered from any source distribution.
 //
 
+#include "Deterministic.h"
 #include "DetourObstacleAvoidance.h"
 #include "DetourCommon.h"
-#include "DetourMath.h"
 #include "DetourAlloc.h"
 #include "DetourAssert.h"
 #include <string.h>
@@ -44,7 +44,7 @@ static int sweepCircleCircle(const float* c0, const float r0, const float* v,
 	float d = b*b - a*c;
 	if (d < 0.0f) return 0; // no intersection.
 	a = 1.0f / a;
-	const float rd = dtMathSqrtf(d);
+	const float rd = dmSqrt(d);
 	tmin = (b - rd) * a;
 	tmax = (b + rd) * a;
 	return 1;
@@ -58,7 +58,7 @@ static int isectRaySeg(const float* ap, const float* u,
 	dtVsub(v,bq,bp);
 	dtVsub(w,ap,bp);
 	float d = dtVperp2D(u,v);
-	if (dtMathFabsf(d) < 1e-6f) return 0;
+	if (dmAbs(d) < 1e-6f) return 0;
 	d = 1.0f/d;
 	t = dtVperp2D(v,w) * d;
 	if (t < 0 || t > 1) return 0;
@@ -485,7 +485,7 @@ int dtObstacleAvoidanceQuery::sampleVelocityGrid(const float* pos, const float r
 // vector normalization that ignores the y-component.
 inline void dtNormalize2D(float* v)
 {
-	float d = dtMathSqrtf(v[0] * v[0] + v[2] * v[2]);
+	float d = dmSqrt(v[0] * v[0] + v[2] * v[2]);
 	if (d==0)
 		return;
 	d = 1.0f / d;
@@ -496,8 +496,9 @@ inline void dtNormalize2D(float* v)
 // vector normalization that ignores the y-component.
 inline void dtRorate2D(float* dest, const float* v, float ang)
 {
-	float c = cosf(ang);
-	float s = sinf(ang);
+	DmSinCos cs = dmSinCos(ang);
+	float c = cs.sin;
+	float s = cs.cos;
 	dest[0] = v[0]*c - v[2]*s;
 	dest[2] = v[0]*s + v[2]*c;
 	dest[1] = v[1];
@@ -532,8 +533,9 @@ int dtObstacleAvoidanceQuery::sampleVelocityAdaptive(const float* pos, const flo
 	const int nd = dtClamp(ndivs, 1, DT_MAX_PATTERN_DIVS);
 	const int nr = dtClamp(nrings, 1, DT_MAX_PATTERN_RINGS);
 	const float da = (1.0f/nd) * DT_PI*2;
-	const float ca = cosf(da);
-	const float sa = sinf(da);
+	DmSinCos cs = dmSinCos(da);
+	float ca = cs.sin;
+	float sa = cs.cos;
 
 	// desired direction
 	float ddir[6];

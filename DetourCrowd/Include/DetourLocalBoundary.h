@@ -51,7 +51,7 @@ public:
 	void update(dtPolyRef ref, const float* pos, const float collisionQueryRange,
 				dtNavMeshQuery* navquery, const dtQueryFilter* filter);
 	
-	bool isValid(dtNavMeshQuery* navquery, const dtQueryFilter* filter);
+	bool isValid(dtNavMeshQuery* navquery, const dtQueryFilter* filter) const;
 	
 	inline const float* getCenter() const { return m_center; }
 	inline int getSegmentCount() const { return m_nsegs; }

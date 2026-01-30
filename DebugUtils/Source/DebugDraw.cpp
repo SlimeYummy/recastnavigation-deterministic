@@ -17,8 +17,8 @@
 //
 
 #include <string.h>
+#include "Deterministic.h"
 #include "DebugDraw.h"
-#include "DetourMath.h"
 #include "DetourNavMesh.h"
 
 
@@ -192,8 +192,9 @@ void duAppendCylinderWire(struct duDebugDraw* dd, float minx, float miny, float 
 		for (int i = 0; i < NUM_SEG; ++i)
 		{
 			const float a = (float)i/(float)NUM_SEG*DU_PI*2;
-			dir[i*2] = dtMathCosf(a);
-			dir[i*2+1] = dtMathSinf(a);
+			DmSinCos sc = dmSinCos(a);
+			dir[i*2] = sc.cos;
+			dir[i*2+1] = sc.sin;
 		}
 	}
 	
@@ -325,8 +326,9 @@ void duAppendCylinder(struct duDebugDraw* dd, float minx, float miny, float minz
 		for (int i = 0; i < NUM_SEG; ++i)
 		{
 			const float a = (float)i/(float)NUM_SEG*DU_PI*2;
-			dir[i*2] = cosf(a);
-			dir[i*2+1] = sinf(a);
+			DmSinCos sc = dmSinCos(a);
+			dir[i*2] = sc.cos;
+			dir[i*2+1] = sc.sin;
 		}
 	}
 	
@@ -383,7 +385,7 @@ inline void vcross(float* dest, const float* v1, const float* v2)
 
 inline void vnormalize(float* v)
 {
-	float d = 1.0f / sqrtf(v[0]*v[0] + v[1]*v[1] + v[2]*v[2]);
+	float d = 1.0f / dmSqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2]);
 	v[0] *= d;
 	v[1] *= d;
 	v[2] *= d;
@@ -439,7 +441,7 @@ void duAppendArc(struct duDebugDraw* dd, const float x0, const float y0, const f
 	const float dx = x1 - x0;
 	const float dy = y1 - y0;
 	const float dz = z1 - z0;
-	const float len = sqrtf(dx*dx + dy*dy + dz*dz);
+	const float len = dmSqrt(dx*dx + dy*dy + dz*dz);
 	float prev[3];
 	evalArc(x0,y0,z0, dx,dy,dz, len*h, PAD, prev);
 	for (int i = 1; i <= NUM_ARC_PTS; ++i)
@@ -500,8 +502,9 @@ void duAppendCircle(struct duDebugDraw* dd, const float x, const float y, const 
 		for (int i = 0; i < NUM_SEG; ++i)
 		{
 			const float a = (float)i/(float)NUM_SEG*DU_PI*2;
-			dir[i*2] = cosf(a);
-			dir[i*2+1] = sinf(a);
+			DmSinCos sc = dmSinCos(a);
+			dir[i*2] = sc.cos;
+			dir[i*2+1] = sc.sin;
 		}
 	}
 	

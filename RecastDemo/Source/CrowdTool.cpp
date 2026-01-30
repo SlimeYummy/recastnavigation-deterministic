@@ -16,10 +16,10 @@
 // 3. This notice may not be removed or altered from any source distribution.
 //
 
-#include <math.h>
 #include <stdio.h>
 #include <string.h>
 #include <float.h>
+#include "Deterministic.h"
 #include "SDL.h"
 #include "SDL_opengl.h"
 #ifdef __APPLE__
@@ -56,7 +56,7 @@ static bool isectSegAABB(const float* sp, const float* sq,
 	// For all three slabs
 	for (int i = 0; i < 3; i++)
 	{
-		if (fabsf(d[i]) < EPS)
+		if (dmAbs(d[i]) < EPS)
 		{
 			// Ray is parallel to slab. No hit if origin not within slab
 			if (sp[i] < amin[i] || sp[i] > amax[i])

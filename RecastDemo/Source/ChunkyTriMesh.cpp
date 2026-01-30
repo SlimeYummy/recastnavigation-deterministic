@@ -16,10 +16,10 @@
 // 3. This notice may not be removed or altered from any source distribution.
 //
 
+#include "Deterministic.h"
 #include "ChunkyTriMesh.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 
 struct BoundsItem
 {
@@ -118,12 +118,12 @@ static void subdivide(BoundsItem* items, int nitems, int imin, int imax, int tri
 		if (axis == 0)
 		{
 			// Sort along x-axis
-			qsort(items+imin, static_cast<size_t>(inum), sizeof(BoundsItem), compareItemX);
+			dmQsort(items+imin, static_cast<size_t>(inum), sizeof(BoundsItem), compareItemX);
 		}
 		else if (axis == 1)
 		{
 			// Sort along y-axis
-			qsort(items+imin, static_cast<size_t>(inum), sizeof(BoundsItem), compareItemY);
+			dmQsort(items+imin, static_cast<size_t>(inum), sizeof(BoundsItem), compareItemY);
 		}
 		
 		int isplit = imin+inum/2;
@@ -211,7 +211,7 @@ inline bool checkOverlapRect(const float amin[2], const float amax[2],
 }
 
 int rcGetChunksOverlappingRect(const rcChunkyTriMesh* cm,
-							   float bmin[2], float bmax[2],
+	                           const float bmin[2], const float bmax[2],
 							   int* ids, const int maxIds)
 {
 	// Traverse tree
@@ -259,7 +259,7 @@ static bool checkOverlapSegment(const float p[2], const float q[2],
 	
 	for (int i = 0; i < 2; i++)
 	{
-		if (fabsf(d[i]) < EPSILON)
+		if (dmAbs(d[i]) < EPSILON)
 		{
 			// Ray is parallel to slab. No hit if origin not within slab
 			if (p[i] < bmin[i] || p[i] > bmax[i])
@@ -281,7 +281,7 @@ static bool checkOverlapSegment(const float p[2], const float q[2],
 }
 
 int rcGetChunksOverlappingSegment(const rcChunkyTriMesh* cm,
-								  float p[2], float q[2],
+	                              const float p[2], const float q[2],
 								  int* ids, const int maxIds)
 {
 	// Traverse tree

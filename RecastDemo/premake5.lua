@@ -25,7 +25,7 @@ workspace "recastnavigation"
 	rtti "Off"
 	symbols "On"
 	flags { "FatalCompileWarnings" }
-	cppdialect "C++98"
+	cppdialect "C++11"
 
 	-- debug configs
 	filter "configurations:Debug"
@@ -56,6 +56,17 @@ workspace "recastnavigation"
 	filter "platforms:Win64"
 		architecture "x64"
 
+project "Deterministic"
+	language "C++"
+	kind "StaticLib"
+	includedirs {
+		"../Deterministic/Include"
+	}
+	files {
+		"../Deterministic/Include/*.h",
+		"../Deterministic/Source/*.cpp"
+	}
+
 project "DebugUtils"
 	language "C++"
 	kind "StaticLib"
@@ -63,23 +74,27 @@ project "DebugUtils"
 		"../DebugUtils/Include",
 		"../Detour/Include",
 		"../DetourTileCache/Include",
-		"../Recast/Include"
+		"../Recast/Include",
+		"../Deterministic/Include"
 	}
 	files {
 		"../DebugUtils/Include/*.h",
 		"../DebugUtils/Source/*.cpp"
 	}
+	links { "Deterministic" }
 
 project "Detour"
 	language "C++"
 	kind "StaticLib"
 	includedirs { 
-		"../Detour/Include" 
+		"../Detour/Include",
+		"../Deterministic/Include"
 	}
-	files { 
+	files {
 		"../Detour/Include/*.h", 
 		"../Detour/Source/*.cpp" 
 	}
+	links { "Deterministic" }
 	-- linux library cflags and libs
 	filter {"system:linux", "toolset:gcc"}
 		buildoptions {
@@ -93,12 +108,14 @@ project "DetourCrowd"
 	includedirs {
 		"../DetourCrowd/Include",
 		"../Detour/Include",
-		"../Recast/Include"
+		"../Recast/Include",
+		"../Deterministic/Include"
 	}
 	files {
 		"../DetourCrowd/Include/*.h",
 		"../DetourCrowd/Source/*.cpp"
 	}
+	links { "Deterministic" }
 
 project "DetourTileCache"
 	language "C++"
@@ -106,23 +123,27 @@ project "DetourTileCache"
 	includedirs {
 		"../DetourTileCache/Include",
 		"../Detour/Include",
-		"../Recast/Include"
+		"../Recast/Include",
+		"../Deterministic/Include"
 	}
 	files {
 		"../DetourTileCache/Include/*.h",
 		"../DetourTileCache/Source/*.cpp"
 	}
+	links { "Deterministic" }
 
 project "Recast"
 	language "C++"
 	kind "StaticLib"
 	includedirs { 
-		"../Recast/Include" 
+		"../Recast/Include",
+		"../Deterministic/Include"
 	}
 	files { 
 		"../Recast/Include/*.h",
 		"../Recast/Source/*.cpp" 
 	}
+	links { "Deterministic" }
 
 project "RecastDemo"
 	language "C++"
@@ -135,7 +156,8 @@ project "RecastDemo"
 		"../Detour/Include",
 		"../DetourCrowd/Include",
 		"../DetourTileCache/Include",
-		"../Recast/Include"
+		"../Recast/Include",
+		"../Deterministic/Include"
 	}
 	files {
 		"../RecastDemo/Include/*.h",
@@ -146,6 +168,7 @@ project "RecastDemo"
 
 	-- project dependencies
 	links {
+		"Deterministic",
 		"DebugUtils",
 		"Detour",
 		"DetourCrowd",
@@ -212,6 +235,7 @@ project "Tests"
 
 	includedirs { 
 		"../DebugUtils/Include",
+		"../Deterministic/Include",
 		"../Detour/Include",
 		"../DetourCrowd/Include",
 		"../DetourTileCache/Include",
@@ -225,19 +249,21 @@ project "Tests"
 		"../Tests/*.h",
 		"../Tests/*.hpp",
 		"../Tests/*.cpp",
+		"../Tests/Deterministic/*.h",
+		"../Tests/Deterministic/*.cpp",
 		"../Tests/Recast/*.h",
 		"../Tests/Recast/*.cpp",
 		"../Tests/Detour/*.h",
 		"../Tests/Detour/*.cpp",
-		"../Tests/DetourCrowd/*.cpp",
 		"../Tests/Contrib/catch2/*.cpp"
 	}
 
 	-- project dependencies
-	links { 
+	links {
+		"Deterministic",
 		"DebugUtils",
-		"DetourCrowd",
 		"Detour",
+		"DetourCrowd",
 		"DetourTileCache",
 		"Recast",
 	}

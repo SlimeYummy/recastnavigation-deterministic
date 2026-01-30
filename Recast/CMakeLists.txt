@@ -14,6 +14,10 @@ if(NOT RECASTNAVIGATION_ENABLE_ASSERTS)
     target_compile_definitions(Recast PUBLIC RC_DISABLE_ASSERTS)
 endif()
 
+target_link_libraries(Recast
+    Deterministic
+)
+
 set_target_properties(Recast PROPERTIES
         SOVERSION ${SOVERSION}
         VERSION ${LIB_VERSION}

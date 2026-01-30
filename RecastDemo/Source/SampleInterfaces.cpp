@@ -1,6 +1,6 @@
-#include <math.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include "Deterministic.h"
 #include "SampleInterfaces.h"
 #include "Recast.h"
 #include "RecastDebugDraw.h"

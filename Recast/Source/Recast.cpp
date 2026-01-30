@@ -16,11 +16,11 @@
 // 3. This notice may not be removed or altered from any source distribution.
 //
 
+#include "Deterministic.h"
 #include "Recast.h"
 #include "RecastAlloc.h"
 #include "RecastAssert.h"
 
-#include <math.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -52,7 +52,7 @@ void rcDelete(T* ptr)
 
 float rcSqrt(float x)
 {
-	return sqrtf(x);
+	return dmSqrt(x);
 }
 
 void rcContext::log(const rcLogCategory category, const char* format, ...)
@@ -341,7 +341,7 @@ void rcMarkWalkableTriangles(rcContext* context, const float walkableSlopeAngle,
 	rcIgnoreUnused(context);
 	rcIgnoreUnused(numVerts);
 
-	const float walkableThr = cosf(walkableSlopeAngle / 180.0f * RC_PI);
+	const float walkableThr = dmCos(walkableSlopeAngle / 180.0f * RC_PI);
 
 	float norm[3];
 
@@ -366,7 +366,7 @@ void rcClearUnwalkableTriangles(rcContext* context, const float walkableSlopeAng
 	rcIgnoreUnused(numVerts);
 
 	// The minimum Y value for a face normal of a triangle with a walkable slope.
-	const float walkableLimitY = cosf(walkableSlopeAngle / 180.0f * RC_PI);
+	const float walkableLimitY = dmCos(walkableSlopeAngle / 180.0f * RC_PI);
 
 	float faceNormal[3];
 	for (int i = 0; i < numTris; ++i)

@@ -10,6 +10,10 @@ target_include_directories(Recast PUBLIC
     "$<BUILD_INTERFACE:${Recast_INCLUDE_DIR}>"
 )
 
+if(NOT RECASTNAVIGATION_ENABLE_ASSERTS)
+    target_compile_definitions(Recast PUBLIC RC_DISABLE_ASSERTS)
+endif()
+
 target_link_libraries(Recast
     Deterministic
 )
